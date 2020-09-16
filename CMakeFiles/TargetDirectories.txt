@@ -1,0 +1,3 @@
+/home/gurth/Workstation/etc/gasm/CMakeFiles/edit_cache.dir
+/home/gurth/Workstation/etc/gasm/CMakeFiles/rebuild_cache.dir
+/home/gurth/Workstation/etc/gasm/CMakeFiles/gasm.dir

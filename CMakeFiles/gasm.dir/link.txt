@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/gasm.dir/main.cpp.o CMakeFiles/gasm.dir/init.cpp.o CMakeFiles/gasm.dir/translate.cpp.o CMakeFiles/gasm.dir/error.cpp.o CMakeFiles/gasm.dir/process.cpp.o  -o gasm 
