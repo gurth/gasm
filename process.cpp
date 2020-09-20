@@ -7,21 +7,6 @@
 #include "process.h"
 #include "register.h"
 
-extern size64 rax;
-extern size64 rbx;
-extern size64 rcx;
-extern size64 rdx;
-extern size64 r8;
-extern size64 r9;
-extern size64 r10;
-extern size64 r11;
-extern size64 r12;
-extern size64 r13;
-extern size64 r14;
-extern size64 r15;
-extern size64 rip;
-extern size64 rfp;
-
 using namespace std;
 
 Process::Process()
