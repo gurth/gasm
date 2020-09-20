@@ -15,6 +15,7 @@ int main()
             cout << ">> ";
             getline(cin, buff);
             if (buff == ".q") break;
+
 			__asm__ __volatile__("call fresh");
 			main.ShowRegisterStatus();
         }

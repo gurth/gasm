@@ -4,6 +4,7 @@
 
 #include "register.h"
 
+FR flags;
 
 size64 rax=0;
 size64 rbx=0;
@@ -17,18 +18,45 @@ size64 r12=0;
 size64 r13=0;
 size64 r14=0;
 size64 r15=0;
-size64 rip=0;
-size64 rfp=0;
+
+size64 rsi=0;
+size64 rdi=0;
+
+size64 rfr=0;
 
 
 BOOL __attribute__((naked)) fresh()
 {
     __asm__ __volatile__(
-            "mov %%rax,%0\n"
+            "push %rax\n"\
+            "push %rsi\n"\
+            "push %rdi\n"\
+            "pushf"
+            );
+    __asm__ __volatile__(
+            "pop %0"\
+            :"=rdi"((size64)rfr)
+            :"rdi"((size64)rfr)
+            :
+            );
+    __asm__ __volatile__(
+            "pop %0"
+            :"=rdi"((size64)rdi)
+            :"rdi"((size64)rdi)
+            :
+    );
+    __asm__ __volatile__(
+            "pop %0"
+            :"=rsi"((size64)rsi)
+            :"rsi"((size64)rsi)
+            :
+    );
+    __asm__ __volatile__(
+            "pop %0"
             :"=rax"((size64)rax)
             :"rax"((size64)rax)
             :
-            );
+    );
     __asm__ __volatile__(
             "call Getrbx\n"\
             "mov %%rax,%0"
@@ -106,20 +134,7 @@ BOOL __attribute__((naked)) fresh()
             :"r"((size64)r15)
             :
     );
-    __asm__ __volatile__(
-            "call Getrip\n"\
-            "mov %%rax,%0"
-            :"=rip"((size64)rip)
-            :"rip"((size64)rip)
-            :
-    );
-    __asm__ __volatile__(
-            "call Getrfp\n"\
-            "mov %%rax,%0"
-            :"=rfp"((size64)rfp)
-            :"rfp"((size64)rfp)
-            :
-    );
+    __asm__ __volatile__("call ParsingFR");
     __asm__ __volatile__(
             "mov $1, %rax\n"\
             "ret");
@@ -218,18 +233,35 @@ size64 __attribute__((naked)) Getr15()
     );
 }
 
-size64 __attribute__((naked)) Getrip()
+void ParsingFR()
 {
-    __asm__ __volatile__(
-            //"mov %rip,%rax"
-            "\nret"
-    );
-}
-
-size64 __attribute__((naked)) Getrfp()
-{
-    __asm__ __volatile__(
-            //"mov %rfp,%rax"
-            "\nret"
-    );
+    short fr=rfr & 0x000000000000ffff;
+    if(fr & POS_CF)
+        flags.CF=1;
+    else flags.CF=0;
+    if(fr & POS_PF)
+        flags.PF=1;
+    else flags.PF=0;
+    if(fr & POS_AF)
+        flags.AF=1;
+    else flags.AF=0;
+    if(fr & POS_ZF)
+        flags.ZF=1;
+    else flags.ZF=0;
+    if(fr & POS_SF)
+        flags.SF=1;
+    else flags.SF=0;
+    if(fr & POS_TF)
+        flags.TF=1;
+    else flags.TF=0;
+    if(fr & POS_IF)
+        flags.IF=1;
+    else flags.IF=0;
+    if(fr & POS_DF)
+        flags.DF=1;
+    else flags.DF=0;
+    if(fr & POS_OF)
+        flags.OF=1;
+    else flags.OF=0;
+    return;
 }
