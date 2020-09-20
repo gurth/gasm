@@ -1,2 +1,3 @@
-# gasm
-A Assembly Interpreter
+# Gasm
+A Assembly Interpreter.
+

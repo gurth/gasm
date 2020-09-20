@@ -8,6 +8,7 @@
 struct system_info
 {
     unsigned long long mem;
+    short buffer;
 };
 
 typedef struct system_info system_info;
@@ -20,15 +21,18 @@ typedef struct system_info system_info;
 class Process
 {
 private:
-    constexpr static const system_info default_info={0x2000000};
+    void* buff= nullptr;
+    void* vmem= nullptr;
     system_info this_info;
+private:
+    constexpr static const system_info default_info={0x2000000, 16};
     bool init();
     bool uninit();
 public:
     Process();
     Process(system_info sysinfo);
     ~Process();
-
+    void ShowRegisterStatus();
 };
 
 

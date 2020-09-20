@@ -3,4 +3,4 @@ project(gasm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(gasm main.cpp init.cpp translate.cpp translate.h error.cpp error.h process.cpp process.h)
+add_executable(gasm main.cpp init.cpp translate.cpp translate.h error.cpp error.h process.cpp process.h register.c register.h)
