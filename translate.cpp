@@ -4,23 +4,38 @@
 
 #include "translate.h"
 #include <vector>
+#include<cstring>
 
 using namespace std;
 
 Translate::Translate()
 {
-
+    machine_code=(char*)malloc(sizeof(char)*MACHIEE_CODE_LENGTH);
 }
 
 Translate::Translate(std::string cmd)
 {
+    machine_code=(char*)malloc(sizeof(char)*MACHIEE_CODE_LENGTH);
     this->raw_cmd=cmd;
     Parsing();
+    AttachReturn();
 }
 
 Translate::~Translate()
 {
+    if(machine_code)
+        free(machine_code);
+}
 
+void Translate::CopyCode(char* exe_buff)
+{
+    memcpy(exe_buff,machine_code,length);
+}
+
+void Translate::AttachReturn()
+{
+    machine_code[length]=0xc3;
+    length++;
 }
 
 void Translate::Parsing()

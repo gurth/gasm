@@ -6,8 +6,7 @@
 
 Register reg;
 
-
-BOOL __attribute__((naked)) fresh()
+void __attribute__((naked)) fresh()
 {
     __asm__ __volatile__(
             "push %rax\n"\
@@ -117,9 +116,108 @@ BOOL __attribute__((naked)) fresh()
             :
     );
     __asm__ __volatile__("call ParsingFR");
+    __asm__ __volatile__("ret");
+}
+
+void __attribute__((naked)) restore()
+{
     __asm__ __volatile__(
-            "mov $1, %rax\n"\
-            "ret");
+        "mov %0,%%rbx"
+        :
+        :"rax"((size64)reg.rbx)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%rcx"
+        :
+        :"rax"((size64)reg.rcx)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%rdx"
+        :
+        :"rax"((size64)reg.rdx)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r8"
+        :
+        :"r"((size64)reg.r8)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r9"
+        :
+        :"r"((size64)reg.r9)
+    :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r10"
+        :
+        :"r"((size64)reg.r10)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r11"
+        :
+        :"r"((size64)reg.r11)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r12"
+        :
+        :"r"((size64)reg.r12)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r13"
+        :
+        :"r"((size64)reg.r13)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r14"
+        :
+        :"r"((size64)reg.r14)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%r15"
+        :
+        :"r"((size64)reg.r15)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%rax\n"\
+        "mov %%rax,%%rdi"
+        :
+        :"rdi"((size64)reg.rdi)
+        :
+    );
+    __asm__ __volatile__(
+        "mov %0,%%rax\n"\
+        "mov %%rax,%%rsi"
+        :
+        :"rdi"((size64)reg.rsi)
+        :
+    );
+    __asm__ __volatile__(
+        "push %0\n"\
+        "popf"
+        :
+        :"rfr"((size64)reg.rfr)
+        :
+    );
+    __asm__ __volatile__(
+        "push %0"
+        :
+        :"rax"((size64)reg.rax)
+        :
+    );
+    __asm__ __volatile__(
+            "pop %rax\n"\
+            "ret"
+            );
 }
 
 size64 __attribute__((naked)) Getrax()

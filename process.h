@@ -22,19 +22,23 @@ typedef struct system_info system_info;
 #ifndef GASM_PROCESS_H
 #define GASM_PROCESS_H
 
-typedef void(*EX)(void);
+typedef __attribute__((naked)) void(*EX)(void);
 
 class Process
 {
 private:
     void* exe_buff= nullptr;
+    void* exe_cmd= nullptr;
     void* vmem= nullptr;
     void* data_seg= nullptr;
     void* stack_seg= nullptr;
     EX ex;
     system_info this_info;
+    constexpr static const system_info default_info={0x2000000, 0x2000,0x40000,MACHIEE_CODE_LENGTH };
+    const unsigned char prefix[10]={0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    const static short offset_rax=2;
 private:
-    constexpr static const system_info default_info={0x2000000, 0x2000,0x40000,16};
+    void restore_rax();
     bool init();
     bool uninit();
 public:

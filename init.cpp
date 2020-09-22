@@ -4,7 +4,7 @@
 #include "error.h"
 #include "process.h"
 #include <sys/mman.h>
-#include <iostream>
+#include <cstring>
 
 bool Process::init()
 {
@@ -16,6 +16,8 @@ bool Process::init()
         return false;
     data_seg=vmem;
     stack_seg=(void*)((char*)vmem+this_info.data+this_info.stack);
+    memcpy(exe_buff,prefix,sizeof(prefix));
+    exe_cmd=(void*)((char*)exe_buff+sizeof(prefix));
     ex=(EX)exe_buff;
     return true;
 }

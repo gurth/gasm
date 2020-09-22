@@ -32,12 +32,20 @@ void Process::CmdParsing(std::string cmd)
     try
     {
         Translate trans(cmd);
+        trans.CopyCode((char*)exe_cmd);
     }
     catch (...) {
-
     }
-    //ex();
+    restore_rax();
+    __asm__ __volatile__("call restore");
+    ex();
     __asm__ __volatile__("call fresh");
+}
+
+void Process::restore_rax()
+{
+    size64 *p=(size64*)((char*)exe_buff+offset_rax);
+    *p=reg.rax;
 }
 
 void Process::ShowRegisterStatus()

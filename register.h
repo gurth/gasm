@@ -64,7 +64,8 @@ typedef struct Register Register;
 
 extern Register reg;
 
-BOOL fresh();
+void fresh();
+void restore();
 
 size64 Getrax();
 size64 Getrbx();
