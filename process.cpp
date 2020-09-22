@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include "error.h"
 #include "process.h"
 #include "register.h"
 
@@ -26,10 +27,35 @@ Process::~Process()
     uninit();
 }
 
+void Process::CmdParsing(std::string cmd)
+{
+    try
+    {
+        Translate trans(cmd);
+    }
+    catch (...) {
+
+    }
+    //ex();
+    __asm__ __volatile__("call fresh");
+}
+
 void Process::ShowRegisterStatus()
 {
-    printf("rax=0x%016x rbx=0x%016x rcx=0x%016x rdx=0x%016x\n",rax,rbx,rcx,rdx);
-    printf("r8 =0x%016x r9 =0x%016x r10=0x%016x r11=0x%016x\n",r8,r9,r10,r11);
-    printf("r12=0x%016x r13=0x%016x r14=0x%016x r15=0x%016x\n",r12,r13,r14,r15);
-    printf("rsi=0x%016x rdi=0x%016x\n",rsi,rdi);
+    printf("rax=0x%016x rbx=0x%016x rcx=0x%016x rdx=0x%016x\n",reg.rax,reg.rbx,reg.rcx,reg.rdx);
+    printf("r8 =0x%016x r9 =0x%016x r10=0x%016x r11=0x%016x\n",reg.r8,reg.r9,reg.r10,reg.r11);
+    printf("r12=0x%016x r13=0x%016x r14=0x%016x r15=0x%016x\n",reg.r12,reg.r13,reg.r14,reg.r15);
+    printf("rsi=0x%016x rdi=0x%016x\n",reg.rsi,reg.rdi);
+    printf("flags: CF=%d AF=%d ZF=%d SF=%d\n",
+           reg.flags.CF,reg.flags.AF,reg.flags.ZF,reg.flags.SF);
+}
+
+void Process::ShowVirtualMemoryStruct()
+{
+    cout << "MemoryStruct:"<<endl;
+    cout << "----------------------------------------------" <<endl;
+    cout << "|  d    | s  |               c                |"<<endl;
+    cout << "----------------------------------------------" << endl;
+    cout << "*            *" << endl;
+    cout << "data         stack" <<endl;
 }

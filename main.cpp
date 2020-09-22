@@ -2,21 +2,24 @@
 #include <string>
 #include "error.h"
 #include "process.h"
-#include "register.h"
 
 using namespace std;
 
 int main()
 {
+    cout << "<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << ">>>>>>   Gasm: A Assembly Interpreter   <<<<<<" << endl;
+    cout << ">>>>>>>         Type .q to exit        <<<<<<<"<<endl;
+    cout << "<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
     try {
         string buff;
         Process main;
+        main.ShowVirtualMemoryStruct();
         while (true) {
             cout << ">> ";
             getline(cin, buff);
             if (buff == ".q") break;
-
-			__asm__ __volatile__("call fresh");
+            main.CmdParsing(buff);
 			main.ShowRegisterStatus();
         }
     }

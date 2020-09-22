@@ -4,25 +4,7 @@
 
 #include "register.h"
 
-FR flags;
-
-size64 rax=0;
-size64 rbx=0;
-size64 rcx=0;
-size64 rdx=0;
-size64 r8=0;
-size64 r9=0;
-size64 r10=0;
-size64 r11=0;
-size64 r12=0;
-size64 r13=0;
-size64 r14=0;
-size64 r15=0;
-
-size64 rsi=0;
-size64 rdi=0;
-
-size64 rfr=0;
+Register reg;
 
 
 BOOL __attribute__((naked)) fresh()
@@ -35,103 +17,103 @@ BOOL __attribute__((naked)) fresh()
             );
     __asm__ __volatile__(
             "pop %0"\
-            :"=rdi"((size64)rfr)
-            :"rdi"((size64)rfr)
+            :"=rdi"((size64)reg.rfr)
+            :"rdi"((size64)reg.rfr)
             :
             );
     __asm__ __volatile__(
             "pop %0"
-            :"=rdi"((size64)rdi)
-            :"rdi"((size64)rdi)
+            :"=rdi"((size64)reg.rdi)
+            :"rdi"((size64)reg.rdi)
             :
     );
     __asm__ __volatile__(
             "pop %0"
-            :"=rsi"((size64)rsi)
-            :"rsi"((size64)rsi)
+            :"=rsi"((size64)reg.rsi)
+            :"rsi"((size64)reg.rsi)
             :
     );
     __asm__ __volatile__(
             "pop %0"
-            :"=rax"((size64)rax)
-            :"rax"((size64)rax)
+            :"=rax"((size64)reg.rax)
+            :"rax"((size64)reg.rax)
             :
     );
     __asm__ __volatile__(
             "call Getrbx\n"\
             "mov %%rax,%0"
-            :"=rbx"((size64)rbx)
-            :"rbx"((size64)rbx)
+            :"=rbx"((size64)reg.rbx)
+            :"rbx"((size64)reg.rbx)
             :
     );
     __asm__ __volatile__(
             "call Getrcx\n"\
             "mov %%rax,%0"
-            :"=rcx"((size64)rcx)
-            :"rcx"((size64)rcx)
+            :"=rcx"((size64)reg.rcx)
+            :"rcx"((size64)reg.rcx)
             :
     );
     __asm__ __volatile__(
             "call Getrdx\n"\
             "mov %%rax,%0"
-            :"=rdx"((size64)rdx)
-            :"rdx"((size64)rdx)
+            :"=rdx"((size64)reg.rdx)
+            :"rdx"((size64)reg.rdx)
             :
     );
     __asm__ __volatile__(
             "call Getr8\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r8)
-            :"r"((size64)r8)
+            :"=r"((size64)reg.r8)
+            :"r"((size64)reg.r8)
             :
     );
     __asm__ __volatile__(
             "call Getr9\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r9)
-            :"r"((size64)r9)
+            :"=r"((size64)reg.r9)
+            :"r"((size64)reg.r9)
             :
     );
     __asm__ __volatile__(
             "call Getr10\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r10)
-            :"r"((size64)r10)
+            :"=r"((size64)reg.r10)
+            :"r"((size64)reg.r10)
             :
     );
     __asm__ __volatile__(
             "call Getr11\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r11)
-            :"r"((size64)r11)
+            :"=r"((size64)reg.r11)
+            :"r"((size64)reg.r11)
             :
     );
     __asm__ __volatile__(
             "call Getr12\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r12)
-            :"r"((size64)r12)
+            :"=r"((size64)reg.r12)
+            :"r"((size64)reg.r12)
             :
     );
     __asm__ __volatile__(
             "call Getr13\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r13)
-            :"r"((size64)r13)
+            :"=r"((size64)reg.r13)
+            :"r"((size64)reg.r13)
             :
     );
     __asm__ __volatile__(
             "call Getr14\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r14)
-            :"r"((size64)r14)
+            :"=r"((size64)reg.r14)
+            :"r"((size64)reg.r14)
             :
     );
     __asm__ __volatile__(
             "call Getr15\n"\
             "mov %%rax,%0"
-            :"=r"((size64)r15)
-            :"r"((size64)r15)
+            :"=r"((size64)reg.r15)
+            :"r"((size64)reg.r15)
             :
     );
     __asm__ __volatile__("call ParsingFR");
@@ -235,33 +217,33 @@ size64 __attribute__((naked)) Getr15()
 
 void ParsingFR()
 {
-    short fr=rfr & 0x000000000000ffff;
+    short fr=reg.rfr & 0x000000000000ffff;
     if(fr & POS_CF)
-        flags.CF=1;
-    else flags.CF=0;
+        reg.flags.CF=1;
+    else reg.flags.CF=0;
     if(fr & POS_PF)
-        flags.PF=1;
-    else flags.PF=0;
+        reg.flags.PF=1;
+    else reg.flags.PF=0;
     if(fr & POS_AF)
-        flags.AF=1;
-    else flags.AF=0;
+        reg.flags.AF=1;
+    else reg.flags.AF=0;
     if(fr & POS_ZF)
-        flags.ZF=1;
-    else flags.ZF=0;
+        reg.flags.ZF=1;
+    else reg.flags.ZF=0;
     if(fr & POS_SF)
-        flags.SF=1;
-    else flags.SF=0;
+        reg.flags.SF=1;
+    else reg.flags.SF=0;
     if(fr & POS_TF)
-        flags.TF=1;
-    else flags.TF=0;
+        reg.flags.TF=1;
+    else reg.flags.TF=0;
     if(fr & POS_IF)
-        flags.IF=1;
-    else flags.IF=0;
+        reg.flags.IF=1;
+    else reg.flags.IF=0;
     if(fr & POS_DF)
-        flags.DF=1;
-    else flags.DF=0;
+        reg.flags.DF=1;
+    else reg.flags.DF=0;
     if(fr & POS_OF)
-        flags.OF=1;
-    else flags.OF=0;
+        reg.flags.OF=1;
+    else reg.flags.OF=0;
     return;
 }

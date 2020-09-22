@@ -37,25 +37,32 @@ struct FR
 
 typedef struct FR FR;
 
-extern FR flags;
+struct Register
+{
+    FR flags;
 
-extern size64 rax;
-extern size64 rbx;
-extern size64 rcx;
-extern size64 rdx;
-extern size64 r8;
-extern size64 r9;
-extern size64 r10;
-extern size64 r11;
-extern size64 r12;
-extern size64 r13;
-extern size64 r14;
-extern size64 r15;
+    size64 rax;
+    size64 rbx;
+    size64 rcx;
+    size64 rdx;
+    size64 r8;
+    size64 r9;
+    size64 r10;
+    size64 r11;
+    size64 r12;
+    size64 r13;
+    size64 r14;
+    size64 r15;
 
-extern size64 rsi;
-extern size64 rdi;
-extern size64 rfr;
+    size64 rsi;
+    size64 rdi;
 
+    size64 rfr;
+};
+
+typedef struct Register Register;
+
+extern Register reg;
 
 BOOL fresh();
 
