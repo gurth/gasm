@@ -22,6 +22,8 @@ typedef unsigned char BYTE;
 #define POS_DF 0b0000010000000000
 #define POS_OF 0b0000100000000000
 
+#define PTR_TABLE 0x10
+
 struct FR
 {
     BYTE CF;
@@ -60,15 +62,25 @@ struct Register
     size64 rfr;
 };
 
+struct SegPtr{
+    size64 sp;
+    size64 bp;
+};
+
 typedef struct Register Register;
 
 extern Register reg;
+extern size64 ptrtable[];
 
 void fresh();
 void restore();
 
 void regbak();
 void regdisbak();
+
+void prefixcode();
+void suffixcode();
+void tag();
 
 void ParsingFR();
 

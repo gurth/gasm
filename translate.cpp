@@ -25,7 +25,6 @@ Translate::Translate(std::string cmd)
     machine_code=(char*)malloc(sizeof(char)*MACHIEE_CODE_LENGTH);
     this->raw_cmd=cmd;
     Parsing();
-    AttachReturn();
 }
 
 Translate::~Translate()
@@ -43,6 +42,13 @@ void Translate::AttachReturn()
 {
     machine_code[length]=0xc3;
     length++;
+}
+
+void Translate::AttchSuffix(char *suffix, short suf_len)
+{
+    memcpy(machine_code+length,suffix,suf_len);
+    length+=suf_len;
+    AttachReturn();
 }
 
 void Translate::Parsing()
@@ -66,21 +72,22 @@ void Translate::Parsing()
 #endif //OUTSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     system("mkdir -p .cache");
-    ofstream out("./.cache/tmp.asm",ios::out);
-    if(!out.is_open())
+    FILE* ftmp=fopen("./.cache/tmp.asm","w");
+    if(!ftmp)
         throw FileCannotOpen();
-    out << raw_cmd;
-    out.close();
-    system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
+    fputs(raw_cmd.c_str(),ftmp);
+    fclose(ftmp);
+    int asm_pipe = system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
+    if(asm_pipe)
+        throw ErrorCommand();
     FILE* cmd_pipe=popen("objdump -M intel -d ./.cache/tmp.o | grep 0:", "r");
     if(!cmd_pipe)
         throw PipeCannotOpen();
     unsigned long long ctmp=0;
-    fscanf(cmd_pipe,"02x",&ctmp);
-    while(true)
+    while(!feof(cmd_pipe))
         if (fgetc(cmd_pipe) == 9) break;
     char *pb=machine_code;
-    while (true)
+    while (!feof(cmd_pipe))
     {
         if(!fscanf(cmd_pipe,"%02x",&ctmp)) break;
         (*pb)=(char)ctmp;
@@ -88,5 +95,6 @@ void Translate::Parsing()
         length++;
     }
     pclose(cmd_pipe);
+    //system("rm ./.catch/* -f");
 #endif //OUTSIDE_PARSING
 }

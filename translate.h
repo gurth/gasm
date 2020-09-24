@@ -23,6 +23,7 @@ public:
     Translate(std::string cmd);
     ~Translate();
     void CopyCode(char* exe_buff);
+    void AttchSuffix(char*suffix,short suf_len);
 };
 
 #endif //GASM_TRANSLATE_H

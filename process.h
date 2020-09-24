@@ -5,7 +5,18 @@
 #ifndef STRUCT_SYSTEM_INFO
 #define STRUCT_SYSTEM_INFO
 
-#include "translate.h"
+struct offset_info
+{
+    short pre_rsp_save=0x05;
+    short pre_rsp=0x0f;
+    short pre_rax=0x1c;
+
+    short suf_rax=0x02;
+    short suf_rsp=0x0f;
+    short suf_rsp_save=0x19;
+};
+
+typedef struct offset_info offset_info;
 
 struct system_info
 {
@@ -13,6 +24,9 @@ struct system_info
     unsigned long long stack;
     unsigned long long data;
     short exe_buff;
+    short prefix;
+    short suffix;
+    offset_info offset;
 };
 
 typedef struct system_info system_info;
@@ -21,6 +35,8 @@ typedef struct system_info system_info;
 
 #ifndef GASM_PROCESS_H
 #define GASM_PROCESS_H
+
+#include "translate.h"
 
 typedef __attribute__((naked)) void(*EX)(void);
 
@@ -34,11 +50,10 @@ private:
     void* stack_seg= nullptr;
     EX ex;
     system_info this_info;
-    constexpr static const system_info default_info={0x2000000, 0x2000,0x40000,MACHIEE_CODE_LENGTH };
-    const unsigned char prefix[10]={0x48,0xb8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-    const static short offset_rax=2;
+    constexpr static const system_info default_info={0x2000000, 0x2000,0x40000};
+    char* prefix= nullptr;
+    char* suffix= nullptr;
 private:
-    void restore_rax();
     bool init();
     bool uninit();
 public:
