@@ -67,18 +67,8 @@ extern Register reg;
 void fresh();
 void restore();
 
-size64 Getrax();
-size64 Getrbx();
-size64 Getrcx();
-size64 Getrdx();
-size64 Getr8();
-size64 Getr9();
-size64 Getr10();
-size64 Getr11();
-size64 Getr12();
-size64 Getr13();
-size64 Getr14();
-size64 Getr15();
+void regbak();
+void regdisbak();
 
 void ParsingFR();
 

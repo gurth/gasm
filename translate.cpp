@@ -3,8 +3,15 @@
 //
 
 #include "translate.h"
+#ifndef OUTSIDE_PARSING
 #include <vector>
+#endif //OUTSIDE_PARSING
+#ifdef OUTSIDE_PARSING
+#include <fstream>
+#include <cstdio>
+#endif //OUTSIDE_PARSING
 #include<cstring>
+#include "error.h"
 
 using namespace std;
 
@@ -40,6 +47,7 @@ void Translate::AttachReturn()
 
 void Translate::Parsing()
 {
+#ifndef OUTSIDE_PARSING
     string::size_type pos = raw_cmd.find(' ');
     string hcmd=raw_cmd.substr(0,pos);
     vector<string> tcmd;
@@ -55,5 +63,30 @@ void Translate::Parsing()
         tcmd.push_back(raw_cmd.substr(bpos,pos-bpos));
         bpos = pos + 1;
     }
-
+#endif //OUTSIDE_PARSING
+#ifdef OUTSIDE_PARSING
+    system("mkdir -p .cache");
+    ofstream out("./.cache/tmp.asm",ios::out);
+    if(!out.is_open())
+        throw FileCannotOpen();
+    out << raw_cmd;
+    out.close();
+    system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
+    FILE* cmd_pipe=popen("objdump -M intel -d ./.cache/tmp.o | grep 0:", "r");
+    if(!cmd_pipe)
+        throw PipeCannotOpen();
+    unsigned long long ctmp=0;
+    fscanf(cmd_pipe,"02x",&ctmp);
+    while(true)
+        if (fgetc(cmd_pipe) == 9) break;
+    char *pb=machine_code;
+    while (true)
+    {
+        if(!fscanf(cmd_pipe,"%02x",&ctmp)) break;
+        (*pb)=(char)ctmp;
+        pb++;
+        length++;
+    }
+    pclose(cmd_pipe);
+#endif //OUTSIDE_PARSING
 }

@@ -33,13 +33,24 @@ void Process::CmdParsing(std::string cmd)
     {
         Translate trans(cmd);
         trans.CopyCode((char*)exe_cmd);
+        __asm__ __volatile__("call regbak");
+        restore_rax();
+        __asm__ __volatile__("call restore");
+        ex();
+        __asm__ __volatile__("call fresh");
+        __asm__ __volatile__("call regdisbak");
+    }
+    catch (ErrorCommand ex) {
+        cout << ex.what() << endl;
+    }
+    catch (PipeCannotOpen ex) {
+        cout << ex.what() << endl;
+    }
+    catch (FileCannotOpen ex) {
+        cout << ex.what() << endl;
     }
     catch (...) {
     }
-    restore_rax();
-    __asm__ __volatile__("call restore");
-    ex();
-    __asm__ __volatile__("call fresh");
 }
 
 void Process::restore_rax()

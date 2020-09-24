@@ -7,6 +7,8 @@
 
 #define MACHIEE_CODE_LENGTH 32
 
+#define OUTSIDE_PARSING
+
 #include <string>
 class Translate{
 private:

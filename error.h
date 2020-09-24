@@ -34,4 +34,22 @@ public:
     }
 };
 
+class FileCannotOpen : public std::exception
+{
+public:
+    const char * what () const throw ()
+    {
+        return "Cannot open file.";
+    }
+};
+
+class PipeCannotOpen : public std::exception
+{
+public:
+    const char * what () const throw ()
+    {
+        return "Cannot open pipe.";
+    }
+};
+
 #endif //GASM_ERROR_H
