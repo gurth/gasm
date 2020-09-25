@@ -5,6 +5,8 @@
 
 using namespace std;
 
+short Translate::max_length=0;
+
 int main()
 {
     cout << "<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>" << endl;

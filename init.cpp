@@ -26,6 +26,9 @@ bool Process::init()
     this_info.suffix=(unsigned char*)tag-(unsigned char*)suffixcode-7;
 
     this_info.exe_buff=MACHIEE_CODE_LENGTH+this_info.prefix+this_info.suffix;
+
+    Translate::max_length=MACHIEE_CODE_LENGTH+this_info.suffix;
+
     exe_buff=mmap(nullptr,this_info.exe_buff,
                   PROT_EXEC | PROT_READ | PROT_WRITE,MAP_SHARED | MAP_ANONYMOUS,-1,0);
 

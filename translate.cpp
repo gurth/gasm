@@ -17,12 +17,12 @@ using namespace std;
 
 Translate::Translate()
 {
-    machine_code=(char*)malloc(sizeof(char)*MACHIEE_CODE_LENGTH);
+    machine_code=(char*)malloc(sizeof(char)*max_length);
 }
 
 Translate::Translate(std::string cmd)
 {
-    machine_code=(char*)malloc(sizeof(char)*MACHIEE_CODE_LENGTH);
+    machine_code=(char*)malloc(sizeof(char)*max_length);
     this->raw_cmd=cmd;
     Parsing();
 }
@@ -38,17 +38,10 @@ void Translate::CopyCode(char* exe_buff)
     memcpy(exe_buff,machine_code,length);
 }
 
-void Translate::AttachReturn()
-{
-    machine_code[length]=0xc3;
-    length++;
-}
-
 void Translate::AttchSuffix(char *suffix, short suf_len)
 {
     memcpy(machine_code+length,suffix,suf_len);
     length+=suf_len;
-    AttachReturn();
 }
 
 void Translate::Parsing()
@@ -95,6 +88,6 @@ void Translate::Parsing()
         length++;
     }
     pclose(cmd_pipe);
-    //system("rm ./.catch/* -f");
+    system("rm ./.cache/* -f");
 #endif //OUTSIDE_PARSING
 }

@@ -17,7 +17,8 @@ private:
     short length=0;
 private:
     void Parsing();
-    void AttachReturn();
+public:
+    static short max_length;
 public:
     Translate();
     Translate(std::string cmd);
