@@ -7,7 +7,7 @@ Gasm is an assembly interpreter. It can allocate a section of memory as virtual 
 
 ## Download
 
-To get the sources from git, click [here](https://github.com/GurthPalarran/gasm). To get a binary snapshot, see [here](https://github.com/GurthPalarran/gasm/releases/tag/gasm-1.0).
+To get the sources from git, click [here](https://github.com/GurthPalarran/gasm). To get a binary snapshot, see [here](https://github.com/GurthPalarran/gasm/releases/tag/1.0).
 
 ## Build
 
