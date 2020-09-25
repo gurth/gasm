@@ -64,7 +64,6 @@ void Translate::Parsing()
     }
 #endif //OUTSIDE_PARSING
 #ifdef OUTSIDE_PARSING
-    system("mkdir -p .cache");
     FILE* ftmp=fopen("./.cache/tmp.asm","w");
     if(!ftmp)
         throw FileCannotOpen();
@@ -73,21 +72,20 @@ void Translate::Parsing()
     int asm_pipe = system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
     if(asm_pipe)
         throw ErrorCommand();
-    FILE* cmd_pipe=popen("objdump -M intel -d ./.cache/tmp.o | grep 0:", "r");
+    FILE* cmd_pipe=popen("objdump -M intel -d ./.cache/tmp.o | cut -f 2 | cut -d ':' -f 3", "r");
     if(!cmd_pipe)
         throw PipeCannotOpen();
     unsigned long long ctmp=0;
-    while(!feof(cmd_pipe))
-        if (fgetc(cmd_pipe) == 9) break;
     char *pb=machine_code;
     while (!feof(cmd_pipe))
     {
-        if(!fscanf(cmd_pipe,"%02x",&ctmp)) break;
+        if(fscanf(cmd_pipe,"%02x",&ctmp) == EOF) break;
         (*pb)=(char)ctmp;
         pb++;
         length++;
     }
     pclose(cmd_pipe);
+
     system("rm ./.cache/* -f");
 #endif //OUTSIDE_PARSING
 }

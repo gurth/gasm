@@ -37,6 +37,7 @@ typedef struct system_info system_info;
 #define GASM_PROCESS_H
 
 #include "translate.h"
+#include <vector>
 
 typedef __attribute__((naked)) void(*EX)(void);
 
@@ -53,6 +54,8 @@ private:
     constexpr static const system_info default_info={0x2000000, 0x2000,0x40000};
     char* prefix= nullptr;
     char* suffix= nullptr;
+    std::vector<std::string> history;
+    int len_history=0;
 private:
     bool init();
     bool uninit();

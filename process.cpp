@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "error.h"
 #include "process.h"
@@ -25,10 +26,18 @@ Process::Process(system_info sysinfo)
 Process::~Process()
 {
     uninit();
+    ofstream out("./.cache/history",ios::out);
+    if(!out.is_open())
+        throw FileCannotOpen();
+    for(int i=0;i<len_history;i++)
+        out <<history[i]<<endl;
+    out.close();
 }
 
 void Process::CmdParsing(std::string cmd)
 {
+    history.push_back(cmd);
+    len_history++;
     try
     {
         Translate trans(cmd);
