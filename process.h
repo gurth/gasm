@@ -65,6 +65,7 @@ public:
     ~Process();
     void CmdParsing(std::string cmd);
     void ShowRegisterStatus();
+    void ShowRecommendInfo();
     void ShowVirtualMemoryStruct();
 };
 

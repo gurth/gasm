@@ -10,8 +10,9 @@
 #include <fstream>
 #include <cstdio>
 #endif //OUTSIDE_PARSING
-#include<cstring>
+#include <cstring>
 #include "error.h"
+
 
 using namespace std;
 

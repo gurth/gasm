@@ -60,11 +60,13 @@ void Process::CmdParsing(std::string cmd)
         cout << ex.what() << endl;
     }
     catch (...) {
+        cout << "Unknown Error." << endl;
     }
 }
 
 void Process::ShowRegisterStatus()
 {
+    cout << "Register info:"<<endl;
     printf("rax=0x%016lx rbx=0x%016lx rcx=0x%016lx rdx=0x%016lx\n",reg.rax,reg.rbx,reg.rcx,reg.rdx);
     printf("r8 =0x%016lx r9 =0x%016lx r10=0x%016lx r11=0x%016lx\n",reg.r8,reg.r9,reg.r10,reg.r11);
     printf("r12=0x%016lx r13=0x%016lx r14=0x%016lx r15=0x%016lx\n",reg.r12,reg.r13,reg.r14,reg.r15);
@@ -81,4 +83,10 @@ void Process::ShowVirtualMemoryStruct()
     cout << "----------------------------------------------" << endl;
     cout << "*            *" << endl;
     cout << "data         stack" <<endl;
+}
+
+void Process::ShowRecommendInfo()
+{
+    cout << "Recommend:"<<endl;
+    printf("Data segment base at: %p\n",data_seg);
 }
