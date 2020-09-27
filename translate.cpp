@@ -65,27 +65,25 @@ void Translate::Parsing()
 #endif //OUTSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     FILE* ftmp=fopen("./.cache/tmp.asm","w");
+    char elfbuff[0x00000200];
     if(!ftmp)
         throw FileCannotOpen();
     fputs(raw_cmd.c_str(),ftmp);
     fclose(ftmp);
-    int asm_pipe = system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
-    if(asm_pipe)
+    int sysresult = system("nasm -f elf64 ./.cache/tmp.asm -o ./.cache/tmp.o");
+    if(sysresult)
         throw ErrorCommand();
-    FILE* cmd_pipe=popen("objdump -M intel -d ./.cache/tmp.o | cut -f 2 | cut -d ':' -f 3", "r");
-    if(!cmd_pipe)
-        throw PipeCannotOpen();
-    unsigned long long ctmp=0;
-    char *pb=machine_code;
-    while (!feof(cmd_pipe))
+    char*p=machine_code;
+    ifstream elf64("./.cache/tmp.o",ios::in | ios::binary);
+    if(!elf64.is_open())
+        throw FileCannotOpen();
+    elf64.read(elfbuff,0x00000200*sizeof(char));
+    length=(short)elfbuff[0xa0];
+    for(short i=0;i<length;i++)
     {
-        if(fscanf(cmd_pipe,"%02x",&ctmp) == EOF) break;
-        (*pb)=(char)ctmp;
-        pb++;
-        length++;
+        *p=elfbuff[0x0000180+i];
+        p++;
     }
-    pclose(cmd_pipe);
-
-    system("rm ./.cache/* -f");
+    elf64.close();
 #endif //OUTSIDE_PARSING
 }
