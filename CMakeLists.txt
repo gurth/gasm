@@ -3,8 +3,6 @@ project(gasm)
 
 set(CMAKE_CXX_STANDARD 14)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -l readline")
-
 add_executable(gasm main.cpp init.cpp translate.cpp translate.h error.cpp error.h process.cpp process.h register.c register.h)
 
 target_link_libraries(gasm "/usr/lib/x86_64-linux-gnu/libreadline.so")

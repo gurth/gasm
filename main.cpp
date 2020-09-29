@@ -21,6 +21,7 @@ int main()
         main.ShowVirtualMemoryStruct();
         main.ShowRecommendInfo();
         main.ShowRegisterStatus();
+        read_history("./.cache/gasm/history");
         while (true) {
             buff = ::readline(">> ");
             if(!buff.empty())
@@ -29,6 +30,7 @@ int main()
             main.CmdParsing(buff);
 			main.ShowRegisterStatus();
         }
+        write_history("./.cache/gasm/history");
     }
     catch (InitFailed& ex)
     {

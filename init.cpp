@@ -14,7 +14,7 @@ extern "C"
 
 bool Process::init()
 {
-    system("mkdir -p .cache");
+    system("mkdir -p ./.cache/gasm");
 
     vmem=mmap(nullptr,this_info.mem,
             PROT_EXEC | PROT_READ | PROT_WRITE,MAP_SHARED | MAP_ANONYMOUS,-1,0);
@@ -70,5 +70,9 @@ bool Process::uninit()
         munmap(exe_buff,this_info.exe_buff);
     if(vmem)
         munmap(vmem, this_info.mem);
+    if(prefix)
+        free(prefix);
+    if(suffix)
+        free(suffix);
     return true;
 }
