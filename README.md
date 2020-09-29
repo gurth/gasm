@@ -20,7 +20,7 @@ sudo apt update && sudo apt install nasm libreadline-dev
 If you get source from git, please check out brunch "outasm".
 
 ```
-git check outasm
+git checkout outasm
 ```
 
 Then
