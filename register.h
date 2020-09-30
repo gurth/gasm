@@ -1,5 +1,7 @@
 //
 // Created by gurth on 9/16/20.
+// Use inline assembly to realize some nake function to get and save register
+// status, or prepare the execution of command.
 //
 
 #ifndef GASM_REGISTER_H
@@ -12,6 +14,7 @@ typedef unsigned char BYTE;
 #define TRUE 1
 #define FALSE 0
 
+// This define the position of flags
 #define POS_CF 0b0000000000000001
 #define POS_PF 0b0000000000000100
 #define POS_AF 0b0000000000010000
@@ -24,7 +27,7 @@ typedef unsigned char BYTE;
 
 #define PTR_TABLE 0x10
 
-struct FR
+struct FR    // flag status
 {
     BYTE CF;
     BYTE PF;
@@ -39,7 +42,7 @@ struct FR
 
 typedef struct FR FR;
 
-struct Register
+struct Register // register status
 {
     FR flags;
 
@@ -62,26 +65,21 @@ struct Register
     size64 rfr;
 };
 
-struct SegPtr{
-    size64 sp;
-    size64 bp;
-};
-
 typedef struct Register Register;
 
 extern Register reg;
 extern size64 ptrtable[];
 
-void fresh();
-void restore();
+void fresh();                // Get reg status
+void restore();              // Restore reg status (outside)
 
-void regbak();
-void regdisbak();
+void regbak();               // Back reg status
+void regdisbak();            // Restore reg status (inside)
 
-void prefixcode();
-void suffixcode();
-void tag();
+void prefixcode();           // Execution prefix code
+void suffixcode();           // Execution suffix code
+void tag();                  // Function pointer tag, for getting function length
 
-void ParsingFR();
+void ParsingFR();            // From flags register to flags' status
 
 #endif //GASM_REGISTER_H

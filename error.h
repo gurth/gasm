@@ -1,5 +1,7 @@
 //
 // Created by gurth on 9/16/20.
+// Define some errors derive from std::exception
+//
 //
 
 #ifndef GASM_ERROR_H
@@ -7,7 +9,7 @@
 
 #include <exception>
 
-class ErrorCommand : public std::exception
+class ErrorCommand : public std::exception             // Command is invalid
 {
 public:
     const char * what () const throw ()
@@ -16,7 +18,7 @@ public:
     }
 };
 
-class MemoryOverFlow : public std::exception
+class MemoryOverFlow : public std::exception          // Stack overflow
 {
 public:
     const char * what () const throw ()
@@ -25,7 +27,7 @@ public:
     }
 };
 
-class InitFailed : public std::exception
+class InitFailed : public std::exception              // Cannot init, especially memory
 {
 public:
     const char * what () const throw ()
@@ -34,7 +36,7 @@ public:
     }
 };
 
-class FileCannotOpen : public std::exception
+class FileCannotOpen : public std::exception          // Cannot open file
 {
 public:
     const char * what () const throw ()
@@ -43,7 +45,7 @@ public:
     }
 };
 
-class PipeCannotOpen : public std::exception
+class PipeCannotOpen : public std::exception          // Cannot create a pipe
 {
 public:
     const char * what () const throw ()

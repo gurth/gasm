@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include <fstream>
 #include <string>
+#include <getopt.h>
 #include "error.h"
 #include "process.h"
 #include "register.h"
@@ -81,4 +81,46 @@ void Process::ShowRecommendInfo()
 {
     cout << "Recommend:"<<endl;
     printf("Data segment base at: %p\n",data_seg);
+}
+
+void Process::ArgParsing(int argc, char **argv)
+{
+    static option long_options[]={
+            {"gasmfile", required_argument, nullptr, 'g'},
+            {0, 0, 0, 0}
+    };
+    static const char simple_options[]="g:";
+    int longindex = -1;
+    int opt;
+    while (true)
+    {
+        opt = getopt_long(argc, argv, simple_options, long_options, &longindex);
+        if(opt == -1) break;
+        switch (opt)
+        {
+            case 'g':
+                gasmfile.open(optarg,ios::in);
+                if(!gasmfile.is_open())
+                    throw FileCannotOpen();
+                input_mode=1;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void Process::FillCmdFromFile(std::string& buff)
+{
+    if(gasmfile.eof()) {
+        input_mode = 0;
+        gasmfile.close();
+    }
+    else{
+        cout << ">> ";
+        getline(gasmfile, buff);
+        cout << buff;
+        getchar();
+    }
+    return;
 }

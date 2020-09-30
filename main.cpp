@@ -9,7 +9,7 @@ using namespace std;
 
 short Translate::max_length=0;
 
-int main()
+int main(int argc, char * argv[])
 {
     cout << "<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>>>>   Gasm: A Assembly Interpreter   <<<<<<" << endl;
@@ -18,15 +18,23 @@ int main()
     try {
         string buff;
         Process main;
+        main.ArgParsing(argc,argv);
         main.ShowVirtualMemoryStruct();
         main.ShowRecommendInfo();
         main.ShowRegisterStatus();
         read_history("./.cache/gasm/history");
-        while (true) {
-            buff = ::readline(">> ");
-            if(!buff.empty())
-                add_history(buff.c_str());
+        while (true)
+        {
+            if(main.input_mode==0)
+            {
+                buff = ::readline(">> ");
+                if (!buff.empty())
+                    add_history(buff.c_str());
+            }
+            else if(main.input_mode==1)
+                main.FillCmdFromFile(buff);
             if (buff == "q.") break;
+            else if(buff.empty()) continue;
             main.CmdParsing(buff);
 			main.ShowRegisterStatus();
         }

@@ -80,11 +80,15 @@ void Translate::Parsing()
         throw FileCannotOpen();
     elf64.read(elfbuff,0x00000200*sizeof(char));
     length=(short)elfbuff[0xa0];
+
+    printf("Code: ");
     for(short i=0;i<length;i++)
     {
         *p=elfbuff[0x0000180+i];
+        printf("%02x ",(unsigned char)*p);
         p++;
     }
+    printf("\n");
     elf64.close();
 #endif //OUTSIDE_PARSING
 }
