@@ -9,35 +9,9 @@ Register bak;
 
 size64 ptrtable[PTR_TABLE];
 
-void __attribute__((naked)) prefixcode()
-{
-    __asm__ __volatile__(
-            "mov %rsp,%rax\n"\
-            "mov %rax,0xaaaaaaaaaaaaaaaa\n"\
-            "mov 0xaaaaaaaaaaaaaaaa,%rax\n"\
-            "mov %rax,%rsp\n"\
-            "mov 0xaaaaaaaaaaaaaaaa,%rax"
-    );
-}
-
-void __attribute__((naked)) suffixcode()
-{
-    __asm__ __volatile__(
-            "mov %rax,0xaaaaaaaaaaaaaaaa\n"\
-            "mov %rsp,%rax\n"\
-            "mov %rax,0xaaaaaaaaaaaaaaaa\n"\
-            "mov 0xaaaaaaaaaaaaaaaa,%rax\n"\
-            "mov %rax,%rsp\n"\
-            "ret"
-            );
-}
-
-void __attribute__((naked)) tag(){}
-
 void __attribute__((naked)) fresh()
 {
     __asm__ __volatile__(
-            "push %rax\n"\
             "push %rsi\n"\
             "push %rdi\n"\
             "push %rbx\n"\
@@ -138,12 +112,6 @@ void __attribute__((naked)) fresh()
             :
             :
     );
-    __asm__ __volatile__(
-            "pop %0"
-            :"=rax"((size64)reg.rax)
-            :
-            :
-    );
     __asm__ __volatile__("call ParsingFR");
     __asm__ __volatile__("ret");
 }
@@ -237,22 +205,12 @@ void __attribute__((naked)) restore()
         :"rfr"((size64)reg.rfr)
         :
     );
-    __asm__ __volatile__(
-        "push %0"
-        :
-        :"rax"((size64)reg.rax)
-        :
-    );
-    __asm__ __volatile__(
-            "pop %rax\n"\
-            "ret"
-            );
+    __asm__ __volatile__("ret");
 }
 
 void __attribute__((naked)) regbak()
 {
     __asm__ __volatile__(
-            "push %rax\n"\
             "push %rsi\n"\
             "push %rdi\n"\
             "push %rbx\n"\
@@ -353,12 +311,6 @@ void __attribute__((naked)) regbak()
             :
             :
     );
-    __asm__ __volatile__(
-            "pop %0"
-            :"=rax"((size64)bak.rax)
-            :
-            :
-    );
     __asm__ __volatile__("call ParsingFR");
     __asm__ __volatile__("ret");
 }
@@ -452,16 +404,7 @@ void __attribute__((naked)) regdisbak()
             :"rfr"((size64)bak.rfr)
             :
     );
-    __asm__ __volatile__(
-            "push %0"
-            :
-            :"rax"((size64)bak.rax)
-            :
-    );
-    __asm__ __volatile__(
-            "pop %rax\n"\
-            "ret"
-    );
+    __asm__ __volatile__("ret");
 }
 
 void ParsingFR()

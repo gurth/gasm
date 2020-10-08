@@ -2,6 +2,7 @@
 #include <string>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <yaml-cpp/yaml.h>
 #include "error.h"
 #include "process.h"
 
@@ -19,6 +20,7 @@ int main(int argc, char * argv[])
         string buff;
         Process main;
         main.ArgParsing(argc,argv);
+        if(!main.init()) throw InitFailed();
         main.ShowVirtualMemoryStruct();
         main.ShowRecommendInfo();
         main.ShowRegisterStatus();
@@ -26,25 +28,29 @@ int main(int argc, char * argv[])
         while (true)
         {
             if(main.input_mode==0)
-            {
                 buff = ::readline(">> ");
-                if (!buff.empty())
-                    add_history(buff.c_str());
-            }
             else if(main.input_mode==1)
                 main.FillCmdFromFile(buff);
+            if (!buff.empty())
+                add_history(buff.c_str());
             if (buff == "q.") break;
             else if(buff.empty()) continue;
             main.CmdParsing(buff);
 			main.ShowRegisterStatus();
         }
         write_history("./.cache/gasm/history");
+        main.uninit();
     }
     catch (InitFailed& ex)
     {
         cout << ex.what() << endl;
     }
-    catch (...) {
+    catch (YAML::ParserException& ex)
+    {
+        cout << ex.what() << endl;
+    }
+    catch (...)
+    {
         cout << "Unknown Error." << endl;
     }
     return 0;

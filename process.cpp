@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <getopt.h>
+#include <yaml-cpp/yaml.h>
 #include "error.h"
 #include "process.h"
 #include "register.h"
@@ -14,18 +15,15 @@ using namespace std;
 Process::Process()
 {
     this_info=default_info;
-    init();
 }
 
 Process::Process(system_info sysinfo)
 {
     this_info=sysinfo;
-    init();
 }
 
 Process::~Process()
 {
-    uninit();
 }
 
 void Process::CmdParsing(std::string cmd)
@@ -87,6 +85,8 @@ void Process::ArgParsing(int argc, char **argv)
 {
     static option long_options[]={
             {"gasmfile", required_argument, nullptr, 'g'},
+            {"help",no_argument, nullptr,'h'},
+            {"config",required_argument, nullptr,'c'},
             {0, 0, 0, 0}
     };
     static const char simple_options[]="g:";
@@ -104,7 +104,15 @@ void Process::ArgParsing(int argc, char **argv)
                     throw FileCannotOpen();
                 input_mode=1;
                 break;
+            case 'h':
+                ShowHelpInfo();
+                exit(0);
+                break;
+            case 'c':
+                GetConfig(optarg);
+                break;
             default:
+                printf("error: unknown argument: %d", opt);
                 break;
         }
     }
@@ -123,4 +131,26 @@ void Process::FillCmdFromFile(std::string& buff)
         getchar();
     }
     return;
+}
+
+void Process::GetConfig(std::string configfile)
+{
+    ifstream inconf(configfile);
+    if(!inconf.is_open())
+        throw FileCannotOpen();
+    YAML::Node yamconf=YAML::Load(inconf);
+    this_info.data=yamconf["system_config"]["data"].as<size64>();
+    this_info.mem=yamconf["system_config"]["memory"].as<size64>();
+    this_info.stack=yamconf["system_config"]["stack"].as<size64>();
+    inconf.close();
+}
+
+void Process::ShowHelpInfo()
+{
+    cout << "OVERVIEW: gasm: An Assembly Interpreter.\n\t see: http://github.com/GurthPalarran/gasm"<<endl;
+    cout << "USAGE: gasm [options] <inputs>"<<endl;
+    cout << "OPTIONS:"<<endl;
+    cout << "\t--gasmfile, -g <gasm file>\tRead command from gasm file "<<endl;
+    cout << "\t--config, -c <config file>\tRead config from .yaml file "<<endl;
+    cout << "\t--help\t\t\t\tPrint this help text"<<endl;
 }

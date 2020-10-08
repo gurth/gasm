@@ -60,8 +60,7 @@ private:
     char* suffix= nullptr;     // Suffix code, need to be copied to exe_buff
     std::ifstream gasmfile;    // Input file stream
 private:
-    bool init();               // Do initialization
-    bool uninit();             // Release initialization
+    void GetConfig(std::string configfile);   // Get config form file
 public:
     int input_mode=0;          // Input mode, 0: /dev/stdin 1: gasmfile
 public:
@@ -72,8 +71,11 @@ public:
     void ShowRegisterStatus();                   // Show register status
     void ShowRecommendInfo();                    // Show recommend information
     void ShowVirtualMemoryStruct();              // Show virtual memory struct, data, stack ang code segment
+    void ShowHelpInfo();                         // Show help information
     void ArgParsing(int argc, char * argv[]);    // Parsing parameters from main()
     void FillCmdFromFile(std::string& buff);     // Fill command
+    bool init();               // Do initialization
+    bool uninit();             // Release initialization
 };
 
 
