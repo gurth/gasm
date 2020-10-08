@@ -89,7 +89,7 @@ void Process::ArgParsing(int argc, char **argv)
             {"config",required_argument, nullptr,'c'},
             {0, 0, 0, 0}
     };
-    static const char simple_options[]="g:";
+    static const char simple_options[]="g:hc:";
     int longindex = -1;
     int opt;
     while (true)
