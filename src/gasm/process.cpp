@@ -31,7 +31,7 @@ void Process::CmdParsing(std::string cmd)
     try
     {
         Translate trans(cmd);
-        trans.AttchSuffix(suffix,this_info.suffix);
+        trans.AttchSuffix(suffix,this_info.suffix,this_info.exe_buff);
         trans.CopyCode((char*)exe_cmd);
         __asm__ __volatile__("call regbak");
         __asm__ __volatile__("call restore");

@@ -14,7 +14,7 @@ extern "C"
 
 bool Process::init()
 {
-    system("mkdir -p ./.cache/gasm");
+    system("mkdir -p ./.gasm");
 
     vmem=mmap(nullptr,this_info.mem,
             PROT_EXEC | PROT_READ | PROT_WRITE,MAP_SHARED | MAP_ANONYMOUS,-1,0);

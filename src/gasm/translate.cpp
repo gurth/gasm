@@ -37,10 +37,19 @@ void Translate::CopyCode(char* exe_buff)
     memcpy(exe_buff,machine_code,length);
 }
 
-void Translate::AttchSuffix(char *suffix, short suf_len)
+void Translate::AttchSuffix(char *suffix, short suf_len, short exe_buff)
 {
     memcpy(machine_code+length,suffix,suf_len);
     length+=suf_len;
+    if(length > exe_buff)
+        throw ExeBufferOverflow();
+}
+
+void Translate::ShowMachineCode()
+{
+    for(size_t i=0;i<length;i++)
+        printf("%02x ",(unsigned char)machine_code[i]);
+    printf("\n");
 }
 
 void Translate::Parsing()
@@ -61,6 +70,7 @@ void Translate::Parsing()
     const uint8_t* buf=buffer.data();
     length=buffer.size();
     memcpy(machine_code,buffer.data(),length);
+    ShowMachineCode();
 #endif //INSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     FILE* ftmp=fopen("./.cache/gasm/tmp.asm","w");

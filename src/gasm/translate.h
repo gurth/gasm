@@ -16,7 +16,7 @@ class Translate{
 private:
     std::string raw_cmd;
     char* machine_code= nullptr;
-    short length=0;
+    size_t length=0;
 private:
     void Parsing();
 public:
@@ -26,7 +26,8 @@ public:
     Translate(std::string cmd);
     ~Translate();
     void CopyCode(char* exe_buff);
-    void AttchSuffix(char*suffix,short suf_len);
+    void AttchSuffix(char*suffix,short suf_len, short exe_buff);
+    void ShowMachineCode();
 };
 
 #endif //GASM_TRANSLATE_H

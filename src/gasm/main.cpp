@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
         main.ShowVirtualMemoryStruct();
         main.ShowRecommendInfo();
         main.ShowRegisterStatus();
-        read_history("./.cache/gasm/history");
+        read_history("./.gasm/history");
         while (true)
         {
             if(main.input_mode==0)
@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
             main.CmdParsing(buff);
 			main.ShowRegisterStatus();
         }
-        write_history("./.cache/gasm/history");
+        write_history("./.gasm/history");
         main.uninit();
     }
     catch (InitFailed& ex)

@@ -54,4 +54,13 @@ public:
     }
 };
 
+class ExeBufferOverflow : public std::exception              // Cannot init, especially memory
+{
+public:
+    const char * what () const throw ()
+    {
+        return "Init Faild";
+    }
+};
+
 #endif //GASM_ERROR_H
