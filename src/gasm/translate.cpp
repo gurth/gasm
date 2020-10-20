@@ -1,7 +1,6 @@
 //
 // Created by gurth on 9/16/20.
 //
-
 #include "translate.h"
 #ifdef OUTSIDE_PARSING
 #include <fstream>
@@ -9,9 +8,11 @@
 #endif //OUTSIDE_PARSING
 #include <cstring>
 #include "error.h"
-
+#include <asmtk/asmtk.h>
 
 using namespace std;
+using namespace asmjit;
+using namespace asmtk;
 
 Translate::Translate()
 {
@@ -45,7 +46,21 @@ void Translate::AttchSuffix(char *suffix, short suf_len)
 void Translate::Parsing()
 {
 #ifdef INSIDE_PARSING
-    
+    CodeInfo ci(asmjit::Environment::kArchX64);
+    CodeHolder code;
+    code.init(ci);
+    x86::Assembler a(&code);
+    AsmParser p(&a);
+    Error err = p.parse(raw_cmd.c_str());
+    if (err)
+    {
+        printf("ERROR: %08x (%s)\n", err, DebugUtils::errorAsString(err));
+        throw ErrorCommand();
+    }
+    CodeBuffer& buffer = code.sectionById(0)->buffer();
+    const uint8_t* buf=buffer.data();
+    length=buffer.size();
+    memcpy(machine_code,buffer.data(),length);
 #endif //INSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     FILE* ftmp=fopen("./.cache/gasm/tmp.asm","w");

@@ -11,6 +11,7 @@
 #define INSIDE_PARSING
 
 #include <string>
+
 class Translate{
 private:
     std::string raw_cmd;
