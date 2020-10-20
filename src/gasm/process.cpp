@@ -8,7 +8,6 @@
 #include <yaml-cpp/yaml.h>
 #include "error.h"
 #include "process.h"
-#include "register.h"
 
 using namespace std;
 
@@ -57,12 +56,84 @@ void Process::CmdParsing(std::string cmd)
 void Process::ShowRegisterStatus()
 {
     cout << "Register info:"<<endl;
-    printf("rax=0x%016lx rbx=0x%016lx rcx=0x%016lx rdx=0x%016lx\n",reg.rax,reg.rbx,reg.rcx,reg.rdx);
-    printf("r8 =0x%016lx r9 =0x%016lx r10=0x%016lx r11=0x%016lx\n",reg.r8,reg.r9,reg.r10,reg.r11);
-    printf("r12=0x%016lx r13=0x%016lx r14=0x%016lx r15=0x%016lx\n",reg.r12,reg.r13,reg.r14,reg.r15);
-    printf("rsi=0x%016lx rdi=0x%016lx\n",reg.rsi,reg.rdi);
-    printf("flags: CF=%d AF=%d ZF=%d SF=%d\n",
-           reg.flags.CF,reg.flags.AF,reg.flags.ZF,reg.flags.SF);
+    if(reg.rax!=regprevious.rax)
+        printf("\033[34mrax=0x%016lx\033[m ",reg.rax);
+    else
+        printf("rax=0x%016lx ",reg.rax);
+    if(reg.rbx!=regprevious.rbx)
+        printf("\033[34mrbx=0x%016lx\033[m ",reg.rbx);
+    else
+        printf("rbx=0x%016lx ",reg.rbx);
+    if(reg.rcx!=regprevious.rcx)
+        printf("\033[34mrcx=0x%016lx\033[m ",reg.rcx);
+    else
+        printf("rcx=0x%016lx ",reg.rcx);
+    if(reg.rdx!=regprevious.rdx)
+        printf("\033[34mrdx=0x%016lx\033[m ",reg.rdx);
+    else
+        printf("rdx=0x%016lx ",reg.rdx);
+    printf("\n");
+    if(reg.r8!=regprevious.r8)
+        printf("\033[34mr8 =0x%016lx\033[m ",reg.r8);
+    else
+        printf("r8 =0x%016lx ",reg.r8);
+    if(reg.r9!=regprevious.r9)
+        printf("\033[34mr9 =0x%016lx\033[m ",reg.r9);
+    else
+        printf("r9 =0x%016lx ",reg.r9);
+    if(reg.r10!=regprevious.r10)
+        printf("\033[34mr10=0x%016lx\033[m ",reg.r10);
+    else
+        printf("r10=0x%016lx ",reg.r10);
+    if(reg.r11!=regprevious.r11)
+        printf("\033[34mr11=0x%016lx\033[m ",reg.r11);
+    else
+        printf("r11=0x%016lx ",reg.r11);
+    printf("\n");
+    if(reg.r12!=regprevious.r12)
+        printf("\033[34mr12=0x%016lx\033[m ",reg.r12);
+    else
+        printf("r12=0x%016lx ",reg.r12);
+    if(reg.r13!=regprevious.r13)
+        printf("\033[34mr13=0x%016lx\033[m ",reg.r13);
+    else
+        printf("r13=0x%016lx ",reg.r13);
+    if(reg.r14!=regprevious.r14)
+        printf("\033[34mr14=0x%016lx\033[m ",reg.r14);
+    else
+        printf("r14=0x%016lx ",reg.r14);
+    if(reg.r15!=regprevious.r15)
+        printf("\033[34mr15=0x%016lx\033[m ",reg.r15);
+    else
+        printf("r15=0x%016lx ",reg.r15);
+    printf("\n");
+    if(reg.rsi!=regprevious.rsi)
+        printf("\033[34mrsi=0x%016lx\033[m ",reg.rsi);
+    else
+        printf("rsi=0x%016lx ",reg.rsi);
+    if(reg.rdi!=regprevious.rdi)
+        printf("\033[34mrdi=0x%016lx\033[m ",reg.rdi);
+    else
+        printf("rdi=0x%016lx ",reg.rdi);
+    printf("\nflags: ");
+    if(reg.flags.CF!=regprevious.flags.CF)
+        printf("\033[34mCF=%d\033[m ",reg.flags.CF);
+    else
+        printf("CF=%d ",reg.flags.CF);
+    if(reg.flags.AF!=regprevious.flags.AF)
+        printf("\033[34mAF=%d\033[m ",reg.flags.AF);
+    else
+        printf("AF=%d ",reg.flags.AF);
+    if(reg.flags.ZF!=regprevious.flags.ZF)
+        printf("\033[34mZF=%d\033[m ",reg.flags.ZF);
+    else
+        printf("ZF=%d ",reg.flags.ZF);
+    if(reg.flags.SF!=regprevious.flags.SF)
+        printf("\033[34mSF=%d\033[m ",reg.flags.SF);
+    else
+        printf("SF=%d ",reg.flags.SF);
+    printf("\n");
+    regprevious=reg;
 }
 
 void Process::ShowVirtualMemoryStruct()

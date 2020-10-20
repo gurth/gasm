@@ -14,20 +14,20 @@
 
 class Translate{
 private:
-    std::string raw_cmd;
-    char* machine_code= nullptr;
-    size_t length=0;
+    std::string raw_cmd;                  // Original command
+    char* machine_code= nullptr;          // Assembler result
+    size_t length=0;                      // Machine code length
 private:
-    void Parsing();
+    void Parsing();                       // Main parsing progress
 public:
-    static short max_length;
+    static short max_length;              // Machine code max length
 public:
     Translate();
-    Translate(std::string cmd);
+    Translate(std::string cmd);           // Constructor, parsing raw command
     ~Translate();
-    void CopyCode(char* exe_buff);
-    void AttchSuffix(char*suffix,short suf_len, short exe_buff);
-    void ShowMachineCode();
+    void CopyCode(char* exe_buff);        // Copy code to exe buffer
+    void AttchSuffix(char*suffix,short suf_len, short exe_buff);  // Attach suffix behind machine code
+    void ShowMachineCode();               // Show machine code in hex
 };
 
 #endif //GASM_TRANSLATE_H

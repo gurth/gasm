@@ -40,6 +40,7 @@ typedef struct system_info system_info;
 #define GASM_PROCESS_H
 
 #include "translate.h"
+#include "register.h"
 #include <fstream>
 
 typedef __attribute__((naked)) void(*EX)(void); // Function pointer to execution buffer
@@ -59,6 +60,7 @@ private:
     char* prefix= nullptr;     // Prefix code, need to be copied to exe_buff
     char* suffix= nullptr;     // Suffix code, need to be copied to exe_buff
     std::ifstream gasmfile;    // Input file stream
+    Register regprevious;
 private:
     void GetConfig(std::string configfile);   // Get config form file
 public:
