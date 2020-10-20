@@ -104,15 +104,13 @@ void Process::ArgParsing(int argc, char **argv)
                     throw FileCannotOpen();
                 input_mode=1;
                 break;
-            case 'h':
-                ShowHelpInfo();
-                exit(0);
-                break;
             case 'c':
                 GetConfig(optarg);
                 break;
+            case 'h':
             default:
-                printf("error: unknown argument: %d", opt);
+                ShowHelpInfo();
+                exit(0);
                 break;
         }
     }
@@ -123,6 +121,7 @@ void Process::FillCmdFromFile(std::string& buff)
     if(gasmfile.eof()) {
         input_mode = 0;
         gasmfile.close();
+        gasmfile.clear();
     }
     else{
         cout << ">> ";
