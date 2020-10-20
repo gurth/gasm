@@ -3,9 +3,6 @@
 //
 
 #include "translate.h"
-#ifndef OUTSIDE_PARSING
-#include <vector>
-#endif //OUTSIDE_PARSING
 #ifdef OUTSIDE_PARSING
 #include <fstream>
 #include <cstdio>
@@ -47,23 +44,9 @@ void Translate::AttchSuffix(char *suffix, short suf_len)
 
 void Translate::Parsing()
 {
-#ifndef OUTSIDE_PARSING
-    string::size_type pos = raw_cmd.find(' ');
-    string hcmd=raw_cmd.substr(0,pos);
-    vector<string> tcmd;
-    string::size_type bpos=pos+1;
-    while(true)
-    {
-        pos = raw_cmd.find(',', bpos);
-        if(string::npos == pos)
-        {
-            tcmd.push_back(raw_cmd.substr(bpos,raw_cmd.size()-bpos));
-            break;
-        }
-        tcmd.push_back(raw_cmd.substr(bpos,pos-bpos));
-        bpos = pos + 1;
-    }
-#endif //OUTSIDE_PARSING
+#ifdef INSIDE_PARSING
+    
+#endif //INSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     FILE* ftmp=fopen("./.cache/gasm/tmp.asm","w");
     char elfbuff[0x00000200];
