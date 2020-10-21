@@ -53,16 +53,19 @@ private:
     void* vmem= nullptr;       // Virtual Memory
     void* data_seg= nullptr;   // Data segment
     void* stack_seg= nullptr;  // Stack segment
-    EX ex;
-    system_info this_info;
+    void* code_seg= nullptr;   // Code segment
+    size64 code_offset=0;      // COde offset in code seg
+    EX ex;                     // Execute address
+    system_info this_info;     // Process information
     constexpr static const system_info default_info={0x2000000, 0x2000,0x40000};
                                // Default system information
     char* prefix= nullptr;     // Prefix code, need to be copied to exe_buff
     char* suffix= nullptr;     // Suffix code, need to be copied to exe_buff
     std::ifstream gasmfile;    // Input file stream
-    Register regprevious;
+    Register regprevious;      // Store previous register status
 private:
     void GetConfig(std::string configfile);   // Get config form file
+    void LoadCode(std::string filename);      // Load code from file to code seg
 public:
     int input_mode=0;          // Input mode, 0: /dev/stdin 1: gasmfile
 public:

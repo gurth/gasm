@@ -30,7 +30,8 @@ void Process::CmdParsing(std::string cmd)
     try
     {
         Translate trans(cmd);
-        trans.AttchSuffix(suffix,this_info.suffix,this_info.exe_buff);
+        trans.ShowMachineCode();
+        trans.AttchSuffix(suffix,this_info.suffix);
         trans.CopyCode((char*)exe_cmd);
         __asm__ __volatile__("call regbak");
         __asm__ __volatile__("call restore");
@@ -116,19 +117,19 @@ void Process::ShowRegisterStatus()
     else
         printf("rdi=0x%016lx ",reg.rdi);
     printf("\nflags: ");
-    if(reg.flags.CF!=regprevious.flags.CF)
+    if(reg.flags.CF==1)
         printf("\033[34mCF=%d\033[m ",reg.flags.CF);
     else
         printf("CF=%d ",reg.flags.CF);
-    if(reg.flags.AF!=regprevious.flags.AF)
+    if(reg.flags.AF==1)
         printf("\033[34mAF=%d\033[m ",reg.flags.AF);
     else
         printf("AF=%d ",reg.flags.AF);
-    if(reg.flags.ZF!=regprevious.flags.ZF)
+    if(reg.flags.ZF==1)
         printf("\033[34mZF=%d\033[m ",reg.flags.ZF);
     else
         printf("ZF=%d ",reg.flags.ZF);
-    if(reg.flags.SF!=regprevious.flags.SF)
+    if(reg.flags.SF==1)
         printf("\033[34mSF=%d\033[m ",reg.flags.SF);
     else
         printf("SF=%d ",reg.flags.SF);
@@ -158,9 +159,10 @@ void Process::ArgParsing(int argc, char **argv)
             {"gasmfile", required_argument, nullptr, 'g'},
             {"help",no_argument, nullptr,'h'},
             {"config",required_argument, nullptr,'c'},
+            {"load",required_argument, nullptr,'l'},
             {0, 0, 0, 0}
     };
-    static const char simple_options[]="g:hc:";
+    static const char simple_options[]="g:hc:l:";
     int longindex = -1;
     int opt;
     while (true)
@@ -178,6 +180,9 @@ void Process::ArgParsing(int argc, char **argv)
             case 'c':
                 GetConfig(optarg);
                 break;
+            case 'l':
+                LoadCode(optarg);
+                break;
             case 'h':
             default:
                 ShowHelpInfo();
@@ -187,7 +192,7 @@ void Process::ArgParsing(int argc, char **argv)
     }
 }
 
-void Process::FillCmdFromFile(std::string& buff)
+void Process::FillCmdFromFile(std::string& buff)       // Unfinished
 {
     if(gasmfile.eof()) {
         input_mode = 0;
@@ -213,6 +218,18 @@ void Process::GetConfig(std::string configfile)
     this_info.mem=yamconf["system_config"]["memory"].as<size64>();
     this_info.stack=yamconf["system_config"]["stack"].as<size64>();
     inconf.close();
+}
+
+void Process::LoadCode(std::string filename)
+{
+    ifstream in(filename,ios::in);
+    if(!in.is_open())
+        throw FileCannotOpen();
+    stringstream buffer;
+    buffer << in.rdbuf();
+    Translate trans(buffer.str());
+    trans.CopyCode((char*)code_seg+code_offset);
+    in.close();
 }
 
 void Process::ShowHelpInfo()

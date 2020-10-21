@@ -9,6 +9,7 @@
 
 //#define OUTSIDE_PARSING
 #define INSIDE_PARSING
+#define ALLOW_REALLOC
 
 #include <string>
 
@@ -26,7 +27,7 @@ public:
     Translate(std::string cmd);           // Constructor, parsing raw command
     ~Translate();
     void CopyCode(char* exe_buff);        // Copy code to exe buffer
-    void AttchSuffix(char*suffix,short suf_len, short exe_buff);  // Attach suffix behind machine code
+    void AttchSuffix(char*suffix,short suf_len);  // Attach suffix behind machine code
     void ShowMachineCode();               // Show machine code in hex
 };
 

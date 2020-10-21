@@ -24,6 +24,7 @@ bool Process::init()
         return false;
     data_seg=vmem;
     stack_seg=(void*)((char*)vmem+this_info.data+this_info.stack);
+    code_seg=stack_seg;
 
     this_info.prefix=(unsigned char*)suffixcode-(unsigned char*)prefixcode-7;
     this_info.suffix=(unsigned char*)tag-(unsigned char*)suffixcode-7;

@@ -37,12 +37,16 @@ void Translate::CopyCode(char* exe_buff)
     memcpy(exe_buff,machine_code,length);
 }
 
-void Translate::AttchSuffix(char *suffix, short suf_len, short exe_buff)
+void Translate::AttchSuffix(char *suffix, short suf_len)
 {
     memcpy(machine_code+length,suffix,suf_len);
     length+=suf_len;
-    if(length > exe_buff)
+    if(length > max_length)
+#ifndef ALLOW_REALLOC
         throw ExeBufferOverflow();
+#else
+        realloc(machine_code,length+max_length);
+#endif //ALLOW_REALLOC
 }
 
 void Translate::ShowMachineCode()
@@ -69,8 +73,13 @@ void Translate::Parsing()
     CodeBuffer& buffer = code.sectionById(0)->buffer();
     const uint8_t* buf=buffer.data();
     length=buffer.size();
+    if(length > max_length)
+#ifndef ALLOW_REALLOC
+        throw ExeBufferOverflow();
+#else
+        realloc(machine_code,length+max_length);
+#endif //ALLOW_REALLOC
     memcpy(machine_code,buffer.data(),length);
-    ShowMachineCode();
 #endif //INSIDE_PARSING
 #ifdef OUTSIDE_PARSING
     FILE* ftmp=fopen("./.cache/gasm/tmp.asm","w");
@@ -87,10 +96,10 @@ void Translate::Parsing()
     if(!elf64.is_open())
         throw FileCannotOpen();
     elf64.read(elfbuff,0x00000200*sizeof(char));
-    length=(short)elfbuff[0xa0];
+    length=elfbuff[0xa0];
 
     printf("Code: ");
-    for(short i=0;i<length;i++)
+    for(size_t i=0;i<length;i++)
     {
         *p=elfbuff[0x0000180+i];
         printf("%02x ",(unsigned char)*p);
