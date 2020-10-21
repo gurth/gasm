@@ -14,14 +14,16 @@ To get the sources from git, click [here](https://github.com/GurthPalarran/gasm)
 First of all please make sure you have installed the following package:
 
 ```
-sudo apt update && sudo apt install nasm libreadline-dev libyaml-cpp-dev
+sudo apt update && sudo apt install libreadline-dev libyaml-cpp-dev
 ```
 
-If you get source from git, please check out brunch "outasm".
+If you get source from git, please check out brunch "inasm".
 
 ```
-git checkout outasm
+git checkout inasm
 ```
+
+If you want to use outside assembler, such as nasm, please make sure it is installed. And check out "outasm" brunch.
 
 Then
 
