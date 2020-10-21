@@ -14,7 +14,7 @@ To get the sources from git, click [here](https://github.com/GurthPalarran/gasm)
 First of all please make sure you have installed the following package:
 
 ```
-sudo apt update && sudo apt install nasm libreadline-dev
+sudo apt update && sudo apt install nasm libreadline-dev libyaml-cpp-dev
 ```
 
 If you get source from git, please check out brunch "outasm".
